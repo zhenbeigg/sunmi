@@ -1,0 +1,17 @@
+{
+    "name": "eykj/sunmi",
+    "description": "一一科技商米组件",
+    "license": "MIT",
+    "keywords": [
+        "eykj",
+        "sunmi"
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "sunmi\\Sunmi\\": "src/"
+        },
+        "files": []
+    }
+}

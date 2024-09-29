@@ -40,7 +40,7 @@ class Idcard
         $header['Sunmi-Appid'] = env('SUNMI_APPID');
         /* 生成请求body */
         $param['body'] = eyc_array_key($param, 'request_id,encrypt_factor');
-        $param = eyc_array_inster($param, $header, 'Sunmi-Timestamp,Sunmi-Nonce');
+        $param = eyc_array_insert($param, $header, 'Sunmi-Timestamp,Sunmi-Nonce');
         /*获取签名 */
         $header['Sunmi-Sign'] = $this->Service->get_sign($param);
         $r = $this->GuzzleHttp->post($this->url . '/v2/eid/eid/idcard/decode', $param['body'], $header);

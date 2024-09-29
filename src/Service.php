@@ -20,6 +20,6 @@ class Service
     public function get_sign(array $param): string
     {
         /* 参考文档：https://developer.sunmi.com/docs/zh-CN/cdixeghjk491/xcdieghjk579 */
-        return bin2hex(hash_hmac('sha256', json_encode($param['body'], 320) . env('SUNMI_APPID') . $param['Sunmi-Timestamp'] . $param['Sunmi-Nonce'], env('SUNMI_KEY'), true));
+        return hash_hmac('sha256', json_encode($param['body'], 320) . env('SUNMI_APPID') . $param['Sunmi-Timestamp'] . $param['Sunmi-Nonce'] . env('SUNMI_KEY'), true);
     }
 }

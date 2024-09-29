@@ -48,7 +48,10 @@ class Idcard
         if ($r['code'] == 1) {
             return $r['data'];
         } else {
-            error($r['code'], $r['msg']);
+            alog($header, 2);
+            alog($param['body'], 2);
+            alog($r, 2);
+            error($r['code'], '解码失败');
         }
     }
 }

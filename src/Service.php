@@ -21,6 +21,6 @@ class Service
     {
         /* 参考文档：https://developer.sunmi.com/docs/zh-CN/cdixeghjk491/xcdieghjk579 */
         /* 1.拼接字符串 stringA=json-body + Sunmi-Appid + Sunmi-Timestamp + Sunmi-Nonce,2. hmac256,3.转16进制*/
-        return bin2hex(hash_hmac('sha256', json_encode($param['body'], 320) . env('SUNMI_APPID') . $param['Sunmi-Timestamp'] . $param['Sunmi-Nonce'] . env('SUNMI_KEY'), true));
+        return bin2hex(hash_hmac('sha256', json_encode($param['body'], 320) . env('SUNMI_APPID') . $param['Sunmi-Timestamp'] . $param['Sunmi-Nonce'], env('SUNMI_KEY'), true));
     }
 }

@@ -35,23 +35,28 @@ class Idcard
      */
     public function decode(array $param): array
     {
-        $header['Sunmi-Timestamp'] = time();
-        $header['Sunmi-Nonce'] = get_rand_str(6);
-        $header['Sunmi-Appid'] = env('SUNMI_APPID');
+        $options['headers']['Sunmi-Timestamp'] = time();
+        $options['headers']['Sunmi-Nonce'] = get_rand_str(6);
+        $options['headers']['Sunmi-Appid'] = env('SUNMI_APPID');
         /* 生成请求body */
         $param['body'] = eyc_array_key($param, 'request_id|card_no,request_id');
         $param['body']['encrypt_factor'] = 'Yy' . get_rand_str(6);
-        $param = eyc_array_insert($param, $header, 'Sunmi-Timestamp,Sunmi-Nonce');
+        $param = eyc_array_insert($param, $options['headers'], 'Sunmi-Timestamp,Sunmi-Nonce');
         /*获取签名 */
         $header['Sunmi-Sign'] = $this->Service->get_sign($param);
-        $r = $this->GuzzleHttp->post($this->url . '/v2/eid/eid/idcard/decode', $param['body'], $header);
+        $r = $this->GuzzleHttp->post($this->url . '/v2/eid/eid/idcard/decode', $param['body'], $options);
         if ($r['code'] == 1) {
-            return $r['data'];
+            //1.Base64 解码
+            //2. DES解密需要的密钥和向量
+            //3. 截取AppKey前8位作为密钥
+            //4. 加密因子作为初始向量
+            // 进行DES解密（假定使用的是DES-CBC模式）
+            return y_json_decode(openssl_decrypt(base64_decode($r['data']['info']), 'DES-CBC', substr(env('SUNMI_KEY'), 0, 8), OPENSSL_RAW_DATA, $param['body']['encrypt_factor']));
         } else {
             alog($header, 2);
             alog($param['body'], 2);
             alog($r, 2);
-            error($r['code'], '解码失败');
+            error($r['code'], '识别失败，请重试');
         }
     }
 }

@@ -46,11 +46,7 @@ class Idcard
         $header['Sunmi-Sign'] = $this->Service->get_sign($param);
         $r = $this->GuzzleHttp->post($this->url . '/v2/eid/eid/idcard/decode', $param['body'], $options);
         if ($r['code'] == 1) {
-            //1.Base64 解码
-            //2. DES解密需要的密钥和向量
-            //3. 截取AppKey前8位作为密钥
-            //4. 加密因子作为初始向量
-            // 进行DES解密（假定使用的是DES-CBC模式）
+            //1.Base64 解码 2. DES解密需要的密钥和向量 3. 截取AppKey前8位作为密钥 4. 加密因子作为初始向量 5.进行DES解密（假定使用的是DES-CBC模式）
             return y_json_decode(openssl_decrypt(base64_decode($r['data']['info']), 'DES-CBC', substr(env('SUNMI_KEY'), 0, 8), OPENSSL_RAW_DATA, $param['body']['encrypt_factor']));
         } else {
             alog($header, 2);

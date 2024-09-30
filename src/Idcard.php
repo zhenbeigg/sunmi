@@ -40,7 +40,7 @@ class Idcard
         $options['headers']['Sunmi-Appid'] = env('SUNMI_APPID');
         /* 生成请求body */
         $param['body'] = eyc_array_key($param, 'request_id|card_no,request_id');
-        $param['body']['encrypt_factor'] = 'Yy' . get_rand_str(6);
+        $param['body']['encrypt_factor'] = get_rand_str(8);
         $param = eyc_array_insert($param, $options['headers'], 'Sunmi-Timestamp,Sunmi-Nonce');
         /*获取签名 */
         $options['headers']['Sunmi-Sign'] = $this->Service->get_sign($param);
